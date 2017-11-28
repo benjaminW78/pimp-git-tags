@@ -1,0 +1,21 @@
+{
+  "name": "companeo_git_tags",
+  "version": "1.0.0",
+  "description": "tool usefull to upgrade current version of git project to the next one based on current head position on git branch",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "git"
+  ],
+  "author": "bwinckell",
+  "license": "ISC",
+  "dependencies": {
+    "git-tags": "^0.2.4",
+    "inquirer": "4.0.0",
+    "node-cmd": "^3.0.0",
+    "semver": "5.4.1"
+  }
+}
