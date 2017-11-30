@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const pathBash = require('os').homedir();
-const alias = '\nalias pimpGitTag=\' npm --prefix '+ process.env.PWD +' run start "$PWD"\'';
+const alias = '\nalias pimpGitTags=\' npm --prefix '+ process.env.PWD +' run start "$PWD"\'';
 
 if(fs.existsSync(pathBash+'/.bashrc.d/bashrc_aliases')){
     appendLineToFile(alias,pathBash+'/.bashrc.d/bashrc_aliases');
