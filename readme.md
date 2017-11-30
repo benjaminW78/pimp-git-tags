@@ -5,13 +5,13 @@ Table of Contents
 =================
 
    * [Pimp my tags](#pimp-my-tags)
-      * [Requierements](#requierements)
+      * [Requirements](#requirements)
       * [Tree](#tree)
       * [Introduction](#introduction)
       * [Installation](#installation)
       * [Usage](#usage)
 
-## Requierements 
+## Requirements 
  - NODEJS VERSION >=8.6 
 ## Tree
 ```bash
