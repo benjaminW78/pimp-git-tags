@@ -58,7 +58,7 @@ const currentPath = process.argv[2];
         }
     }else{
         console.log(chalk.red('there is no semver tag present inside your project.\n'));
-        let t = await inquirer.prompt([{type:'input',name:'value',message:'Type the number of your first annoted Tag : ',default:'0.1.0'}]);
+        let t = await inquirer.prompt([{type:'input',name:'value',message:'Type the number of your first annotated Tag : ',default:'0.1.0'}]);
         let newTag = 'v'+t.value;
         whereToCreateNewTag(newTag);
     }
