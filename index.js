@@ -3,6 +3,7 @@ const semver = require('semver');
 const inquirer = require('inquirer');
 const child_process = require('child_process');
 const cmd = require('node-cmd');
+const chalk = require('chalk');
 
 (async function(){
 
@@ -17,50 +18,57 @@ const cmd = require('node-cmd');
     });
 
     console.log('|---------------------------------------------------------|');
-    console.log('|  Welcome to Pimp my tag                                 |');
-    console.log('|  version 1.0                                            |');
-    console.log('|  based on NodeJS 8.6 and developped by bwinckell        |');
+    console.log('| '+chalk.cyan(' Welcome to Pimp my tag')+'                                 |');
+    console.log('| '+chalk.cyan(' version 1.0')+'                                            |');
+    console.log('| '+chalk.cyan(' based on NodeJS 8.6 and developped by bwinckell')+'        |');
     console.log('|---------------------------------------------------------|');
 
     console.log('|---------------------------------------------------------|');
-    console.log('|  Last tag was : ',lastTag,'                               |');
+    console.log('|  Last tag was : ',chalk.bgGreen(lastTag),'                             |');
     console.log('|  Next possibilities:                                    |');
-    console.log('|     - Major version:', semver.inc(lastTag,'major'),'                            |');
-    console.log('|     - Minor version:', semver.inc(lastTag,'minor'),'                            |');
-    console.log('|     - Patch version:', semver.inc(lastTag,'patch'),'                            |');
+    console.log('|     - Major version:', chalk.red(semver.inc(lastTag,'major')),'                            |');
+    console.log('|     - Minor version:', chalk.yellow(semver.inc(lastTag,'minor')),'                            |');
+    console.log('|     - Patch version:', chalk.magenta(semver.inc(lastTag,'patch')),'                            |');
     console.log('|---------------------------------------------------------|');
 
     console.log('\n');
+    console.log(lastTag)
+    if(lastTag){
+        let t = await inquirer.prompt([{type:'list',name:'bumpType',message:'Select the type of bump you want to proceed',default:'minor',pageSize:10,choices:[new inquirer.Separator(),'major',new inquirer.Separator(),'minor',new inquirer.Separator(),'patch',new inquirer.Separator(),'exit program'],prefix:'Bump tag version \n'}])
+        if(t.bumpType!='exit program'){
+            let newTag = 'v'+semver.inc(lastTag,t.bumpType);
+            whereToCreateNewTag(newTag);
+        }else{
+            console.log('\n see you soon budy');
+        }
+    }else{
+        console.log(chalk.red('there is no semver tag present inside your project.\n'));
+        let t = await inquirer.prompt([{type:'input',name:'value',message:'Type the number of your first annoted Tag : ',default:'0.1.0'}]);
+        let newTag = 'v'+t.value;
+        whereToCreateNewTag(newTag);
+    }
 
-    let t = await inquirer.prompt([{type:'list',name:'bumpType',message:'Select the type of bump you want to proceed',default:'minor',pageSize:10,choices:[new inquirer.Separator(),'major',new inquirer.Separator(),'minor',new inquirer.Separator(),'patch',new inquirer.Separator(),'exit program'],prefix:'Bump tag version \n'}])
-    if(t.bumpType!='exit program'){
+})();
 
-    let newTag = 'v'+semver.inc(lastTag,t.bumpType);
+async function whereToCreateNewTag(newTag){
 
     let choice = await inquirer.prompt([{type:'confirm',name:'value',message:'Do you want to add '+newTag+' to the current git project and at current HEAD position',prefix:'Generate new git tag \n'}])
     if(choice.value){
         generateNewGitTag(newTag);
-        console.log('you created a new tag => '+ newTag);
-        console.log('Don\'t forget to push your tag to share it with \'git push origin --tags\'');
     }else{
         let choice1 = await inquirer.prompt([{type:'confirm',name:'value',message:'Do you want to add '+newTag+' to a specific commit number',prefix:'Generate new git tag custom\n'}])
         if(choice1.value){
             let commit = await inquirer.prompt([{type:'input',name:'value',message:'Please provide a commit hash currently existing on your computer ==> : ',prefix:'Generate new git tag custom\n'}])
             generateNewGitTag(newTag,commit.value);
-            console.log('you created a new tag => '+ newTag);
-            console.log('Don\'t forget to push your tag to share it with \'git push origin --tags\'');
-        }else {
+        }
+        else {
             console.log('\n see you soon budy');
         }
-    }
-    }else{
-        console.log('\n see you soon budy');
-    }
-
-})();
+   }
+}
 
 async function generateNewGitTag(newTag,commit=false){
-    await newTagMessage();
+    await newTagMessage(newTag);
     let editor = 'git';
     if(commit===false){
         let child = child_process.spawn(editor,['tag',newTag,'-a','-F','/tmp/temp.txt'], {
@@ -72,7 +80,7 @@ async function generateNewGitTag(newTag,commit=false){
         });
     }
 };
-function newTagMessage(){
+function newTagMessage(newTag){
     return new Promise(function(resolve,reject){
 
     let editor = 'nano';
@@ -85,7 +93,11 @@ function newTagMessage(){
             reject(e);
         }else{
             resolve(true);
+            console.log('you created a new tag => '+ newTag);
+            console.log('Don\'t forget to push your tag to share it with \'git push origin --tags\'');
         }
     });
     })
+
+
 }
