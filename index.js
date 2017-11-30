@@ -4,11 +4,12 @@ const inquirer = require('inquirer');
 const child_process = require('child_process');
 const cmd = require('node-cmd');
 const chalk = require('chalk');
-
+const currentPath = process.argv[2];
+console.log(currentPath);
 (async function(){
 
     let lastTag = await new Promise((resolve, reject) => {
-        gitTags.latest((err, lastTag) => {
+        gitTags.latest(currentPath,(err, lastTag) => {
             if(err){
                 reject(err);
             }else{
@@ -24,11 +25,12 @@ const chalk = require('chalk');
     console.log('|---------------------------------------------------------|');
 
     console.log('|---------------------------------------------------------|');
-    console.log('|  Last tag was : ',chalk.bgGreen(lastTag),'                             |');
-    console.log('|  Next possibilities:                                    |');
-    console.log('|     - Major version:', chalk.red(semver.inc(lastTag,'major')),'                            |');
-    console.log('|     - Minor version:', chalk.yellow(semver.inc(lastTag,'minor')),'                            |');
-    console.log('|     - Patch version:', chalk.magenta(semver.inc(lastTag,'patch')),'                            |');
+    console.log('| current git project :'+chalk.bgGreen(currentPath));
+    console.log('|  Last tag was : ',chalk.bgGreen(lastTag));
+    console.log('|  Next possibilities:');
+    console.log('|     - Major version:', chalk.red(semver.inc(lastTag,'major')));
+    console.log('|     - Minor version:', chalk.yellow(semver.inc(lastTag,'minor')));
+    console.log('|     - Patch version:', chalk.magenta(semver.inc(lastTag,'patch')));
     console.log('|---------------------------------------------------------|');
 
     console.log('\n');
