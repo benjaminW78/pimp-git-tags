@@ -13,9 +13,10 @@
   "author": "bwinckell",
   "license": "ISC",
   "dependencies": {
-    "git-tags": "^0.2.4",
+    "chalk": "2.3.0",
+    "git-tags": "0.2.4",
     "inquirer": "4.0.0",
-    "node-cmd": "^3.0.0",
+    "node-cmd": "3.0.0",
     "semver": "5.4.1"
   }
 }
