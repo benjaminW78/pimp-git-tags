@@ -4,9 +4,22 @@ const inquirer = require('inquirer');
 const child_process = require('child_process');
 const cmd = require('node-cmd');
 const chalk = require('chalk');
+const banner = require('figlet');
+const chalkRainbow = require('chalk-rainbow');
 const currentPath = process.argv[2];
-console.log(currentPath);
+
 (async function(){
+    let text = await new Promise((resolve,reject)=>{
+            banner('Pimp my tags',{font:'4Max',color:'cyan'},
+                function(err, data) {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve(data);
+                });
+            });
+
+    console.log(chalkRainbow(text));
 
     let lastTag = await new Promise((resolve, reject) => {
         gitTags.latest(currentPath,(err, lastTag) => {
@@ -18,8 +31,9 @@ console.log(currentPath);
         });
     });
 
+
     console.log('|---------------------------------------------------------|');
-    console.log('| '+chalk.cyan(' Welcome to Pimp my tag')+'                                 |');
+    console.log('| '+chalk.cyan(' Welcome to Pimp my tags')+'                                |');
     console.log('| '+chalk.cyan(' version 1.0')+'                                            |');
     console.log('| '+chalk.cyan(' based on NodeJS 8.6 and developped by bwinckell')+'        |');
     console.log('|---------------------------------------------------------|');
@@ -34,14 +48,13 @@ console.log(currentPath);
     console.log('|---------------------------------------------------------|');
 
     console.log('\n');
-    console.log(lastTag)
     if(lastTag){
         let t = await inquirer.prompt([{type:'list',name:'bumpType',message:'Select the type of bump you want to proceed',default:'minor',pageSize:10,choices:[new inquirer.Separator(),'major',new inquirer.Separator(),'minor',new inquirer.Separator(),'patch',new inquirer.Separator(),'exit program'],prefix:'Bump tag version \n'}])
         if(t.bumpType!='exit program'){
             let newTag = 'v'+semver.inc(lastTag,t.bumpType);
             whereToCreateNewTag(newTag);
         }else{
-            console.log('\n see you soon budy');
+            console.log(chalkRainbow('\n see you soon budy'));
         }
     }else{
         console.log(chalk.red('there is no semver tag present inside your project.\n'));
@@ -64,7 +77,7 @@ async function whereToCreateNewTag(newTag){
             generateNewGitTag(newTag,commit.value);
         }
         else {
-            console.log('\n see you soon budy');
+            console.log(chalkRainbow('\n see you soon budy'));
         }
    }
 }
@@ -96,7 +109,7 @@ function newTagMessage(newTag){
         }else{
             resolve(true);
             console.log('you created a new tag => '+ newTag);
-            console.log('Don\'t forget to push your tag to share it with \'git push origin --tags\'');
+            console.log(chalkRainbow('Don\'t forget to push your tag to share it with \'git push origin --tags\''));
         }
     });
     })
