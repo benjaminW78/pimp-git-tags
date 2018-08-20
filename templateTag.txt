@@ -1,6 +1,7 @@
 # Thank you to remove every < > items
-MEP <ADD YOUR DATE under this format dd/MM/YY>:
+MEP <ADD YOUR DATE this format dd/MM/YYYY>:
+Features:
     - <ITEM PASSED TO MEP>
-    - <ITEM PASSED TO MEP>
-    - <ITEM PASSED TO MEP>
-    - <ITEM PASSED TO MEP>
+
+Comments:
+    < Your comments about what you want NOT MANDATORY remove if useless>
