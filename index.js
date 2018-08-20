@@ -113,34 +113,45 @@ async function whereToCreateNewTag(newTag) {
 async function generateNewGitTag(newTag, commit = false) {
     await newTagMessage(newTag)
     let editor = 'git'
+    let child
     if (commit === false) {
-        child_process.spawn(editor, ['tag', newTag, '-a', '-F', '/tmp/temp.txt'], {
+        child = child_process.spawn(editor, ['tag', newTag, '-a', '-F', '/tmp/temp.txt'], {
             cwd: currentPath,
             stdio: 'inherit'
         })
     } else {
-        child_process.spawn(editor, ['tag', newTag, commit, '-a', '-F', '/tmp/temp.txt'], {
+        child = child.spawn(editor, ['tag', newTag, commit, '-a', '-F', '/tmp/temp.txt'], {
             cwd: currentPath,
             stdio: 'inherit'
         })
     }
+
+    child.on('exit', (e, code) => {
+        if (e) {
+            reject(e)
+        } else {
+
+            console.log(chalkRainbow('Don\'t forget to push your tag to share it with '), chalk.bgGreen('\'git push origin --tags\''))
+            cmd.get('rm /tmp/temp.txt')
+
+        }
+    })
 }
 
 function newTagMessage(newTag) {
     return new Promise(function (resolve, reject) {
 
         let editor = 'nano'
-        cmd.get('cp  -f templateTag.txt /tmp/temp.txt')
+        cmd.get('cp -f templateTag.txt /tmp/temp.txt')
         let child = child_process.spawn(editor, ['/tmp/temp.txt'], {
             stdio: 'inherit'
         })
         child.on('exit', function (e, code) {
             if (e) {
-                reject(e)
+                console.log('something went wrong', e)
             } else {
                 resolve(true)
                 console.log('you created a new tag => ' + newTag)
-                console.log(chalkRainbow('Don\'t forget to push your tag to share it with \'git push origin --tags\''))
             }
         })
     })
