@@ -19,7 +19,7 @@
     "figlet": "1.2.0",
     "git-tags": "0.2.4",
     "inquirer": "4.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "node-cmd": "3.0.0",
     "semver": "5.4.1"
   }
